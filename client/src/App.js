@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import Routes from react-router-dom
+import React, { Component } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route from react-router-dom
 import CreatePost from './components/CreatePost';
 import EditPost from './components/EditPost';
 import PostDetails from './components/PostDetails';
@@ -17,9 +17,10 @@ export default class App extends Component {
             <Route path="/add" element={<CreatePost />} />
             <Route path="/edit/:id" element={<EditPost />} />
             <Route path="/post/:id" element={<PostDetails />} />
+
           </Routes>
         </div>
       </BrowserRouter>
-    )
+    );
   }
 }

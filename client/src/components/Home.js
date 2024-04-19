@@ -5,8 +5,8 @@ export default class Home extends Component {
   constructor(props){
     super(props);
 
-    this.state={
-      posts:[]
+    this.state = {
+      posts: []
     };
   }
   
@@ -14,9 +14,9 @@ export default class Home extends Component {
     this.retrievePosts();
   }
 
-  // writing get request
+  // Writing get request
   retrievePosts(){
-    axios.get("/posts").then(res =>{
+    axios.get("/posts").then(res => {
       if(res.data.success){
         this.setState({
           posts: res.data.existingPosts
@@ -25,20 +25,57 @@ export default class Home extends Component {
       }
     });
   }
-  //delete methord
-  onDelete = (id) =>
-  {
-    axios.delete(`/post/delete/${id}`).then((res)=>{
-        alert("delete successfully");
+
+  // Delete method
+  onDelete = (id) => {
+    axios.delete(`/post/delete/${id}`).then((res) => {
+        alert("Deleted successfully");
         this.retrievePosts();
-    })
+    });
+  }
+
+  // Filter posts based on search key
+  filterData(posts, searchKey) {
+    const result = posts.filter((post) =>
+      post.topic.toLowerCase().includes(searchKey)||
+      post.description.toLowerCase().includes(searchKey)||
+      post.postCategory.toLowerCase().includes(searchKey)
+
+
+    );
+    this.setState({ posts: result });
+  }
+
+  // Handle search input change
+  handleSearchArea = (e) => {
+    const searchKey = e.currentTarget.value;
+
+    axios.get("/posts").then(res => {
+        if(res.data.success){
+            this.filterData(res.data.existingPosts, searchKey);
+        }
+    });
   }
 
   render() {
     return (
       <div className="container">
-        <p>All posts</p>
-        <table className="table">
+        <div className="row">
+          <div className="col-lg-9 mt-2 mb-2">
+            <p>All posts</p>
+          </div>
+          <div className="col-lg-3 mt-2 mb-2">
+            <input 
+              className='form-control'
+              type="search"
+              placeholder='Search'
+              name="searchQuery"
+              onChange={this.handleSearchArea}
+            />
+          </div>
+        </div>
+        
+        <table className="table table-hover" style={{ marginTop: '40px' }}>
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -73,7 +110,7 @@ export default class Home extends Component {
           </tbody>
         </table>
         <button className='btn btn-success'>
-          <a href="/add" style={{textDecoration:'none', color:'white'}}>Create new post</a>
+          <a href="/add" style={{ textDecoration:'none', color:'white' }}>Create new post</a>
         </button>
       </div>
     );

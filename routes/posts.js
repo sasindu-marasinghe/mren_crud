@@ -32,6 +32,26 @@ router.get('/posts', async (req, res) => {
         return res.status(400).json({ error: err.message });
     }
 });
+// show details of a specific post
+router.get('/post/:id', async (req, res) => {
+    try {
+        let postId = req.params.id;
+
+        // Use findById() to find the post by its ID
+        let post = await Posts.findById(postId);
+
+        // Check if the post exists
+        if (!post) {
+            return res.status(404).json({ success: false, message: "Post not found" });
+        }
+
+        // Return the post details
+        return res.status(200).json({ success: true, post });
+    } catch (err) {
+        // Handle any errors
+        return res.status(400).json({ success: false, error: err.message });
+    }
+});
 
 
 // Update post
